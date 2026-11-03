@@ -1,0 +1,55 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/HuffmanMainNode/Protocol-Helios/blob/main/schemas/catalog-index.schema.json",
+  "title": "Protocol Helios Agent-Readable Catalog Index",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "generated_at",
+    "catalog_card_count",
+    "unique_repository_count",
+    "entries",
+    "interpretation",
+    "limitations"
+  ],
+  "properties": {
+    "schema_version": { "const": "1.0.0" },
+    "generated_at": { "type": "string", "format": "date-time" },
+    "catalog_card_count": { "type": "integer", "minimum": 0 },
+    "unique_repository_count": { "type": "integer", "minimum": 0 },
+    "entries": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "repository",
+          "url",
+          "index",
+          "category",
+          "description",
+          "matched_keywords",
+          "upstream_topics",
+          "source_card",
+          "classification_status",
+          "upstream_status"
+        ],
+        "properties": {
+          "repository": { "type": "string", "pattern": "^[a-z0-9_.-]+/[a-z0-9_.-]+$" },
+          "url": { "type": "string", "format": "uri" },
+          "index": { "enum": ["By_Agency", "By_Interest_Area"] },
+          "category": { "type": "string", "minLength": 1 },
+          "description": { "type": "string" },
+          "matched_keywords": { "type": "array", "items": { "type": "string" } },
+          "upstream_topics": { "type": "array", "items": { "type": "string" } },
+          "source_card": { "type": "string", "minLength": 1 },
+          "classification_status": { "const": "discovery_hint_requires_human_review" },
+          "upstream_status": { "const": "not_checked_by_export" }
+        },
+        "additionalProperties": false
+      }
+    },
+    "interpretation": { "type": "object" },
+    "limitations": { "type": "array", "items": { "type": "string" } }
+  },
+  "additionalProperties": false
+}
