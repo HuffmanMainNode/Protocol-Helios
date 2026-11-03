@@ -1,53 +1,50 @@
-<div align="center">
-  <h3>🏛️ Official Borrell & Huffman LLC Enterprise Portfolio</h3>
-  <p><i>This repository is a verified public asset of the Borrell & Huffman Intellectual Property Ecosystem.</i></p>
-  <p>
-    <img src="https://img.shields.io/badge/Enterprise-Borrell_%26_Huffman-blue.svg?style=for-the-badge" alt="Enterprise ID">
-    <img src="https://img.shields.io/badge/Status-Public_Showcase-success.svg?style=for-the-badge" alt="Status">
-    <img src="https://img.shields.io/badge/Clearance-Unclassified-yellow.svg?style=for-the-badge" alt="Clearance">
-  </p>
-</div>
-
----
-
-# SB26-189 Compliance Boilerplate
-
-## Pre-Decision Notice
-**[Insert this notice prominently before a user engages with the system]**
-
-> **NOTICE OF AUTOMATED DECISION-MAKING TECHNOLOGY (ADMT)**
-> Please be aware that this system uses an Automated Decision-Making Technology (ADMT) to materially influence a consequential decision affecting you. For more information on how this ADMT works and how your data is used, please see our [Link to full documentation/privacy policy].
-
----
-
-## Post-Adverse Decision Explanation
-**[Provide this explanation within 30 days of an adverse outcome]**
-
-> **EXPLANATION OF ADVERSE DECISION**
->
-> **The Decision:** You have received an adverse outcome regarding [State the specific decision, e.g., your application, eligibility, etc.].
->
-> **Role of ADMT:** This decision was materially influenced by our Automated Decision-Making Technology (ADMT), known as [Insert Name of ADMT], version [Insert Version Number], developed by [Insert Developer Name]. The ADMT processed the following types of personal data from these sources: [List types and sources of data].
->
-> **How to Request More Information or Exercise Your Rights:** You have the right to request additional information regarding this decision and the ADMT used. You may also exercise your consumer rights under Colorado law, including the right to correct data or opt-out. To do so, please follow this process: [Insert simple-to-follow instructions, e.g., click here, email us at X, or fill out this form].
-
-
 # Protocol Helios
 
-## Mission Statement
-Protocol Helios is a curated digital library designed for the comprehensive auditing of government-affiliated software repositories. Guided by Zero Trust principles, this initiative focuses on enhancing AI/Cybersecurity research by systematically identifying and analyzing critical software mechanisms developed by public agencies.
+Protocol Helios is a curated index of public GitHub repositories associated with government agencies and public-sector research. It organizes repository cards by agency and by technical interest area to make discovery and manual review easier.
 
-## Directory Structure
-To facilitate efficient navigation and research, the library is organized into two primary hierarchies:
+**This repository is a catalog, not a security audit service.** Listing a repository does not mean that it is safe, maintained, official, endorsed, or suitable for production use.
 
-- **By_Interest_Area/**: Repositories categorized by technical domains such as AI Agents, Automation, Reverse Engineering, Malware Analysis, and Security Architecture.
-- **By_Agency/**: Repositories organized by their parent government organization (e.g., NSA, CISA, NASA), providing a clear overview of agency-specific software outputs.
+## Catalog structure
 
-## Methodology
-Repositories are identified and indexed using automated scripts leveraging the `PyGithub` library. The selection process involves:
-1. **Discovery**: Scanning known government GitHub organizations.
-2. **Filtering**: Using a targeted list of interest keywords (e.g., 'vulnerability research', 'LLM', 'framework') to identify relevant projects.
-3. **Categorization**: Extracting metadata, descriptions, and topics to populate the hierarchical filing system with detailed markdown summaries.
+- `By_Agency/`: repository cards grouped by the agency or organization associated with the upstream GitHub owner.
+- `By_Interest_Area/`: a second index grouped by technical subject.
+- A repository may intentionally appear in both indexes. The cards are metadata summaries and links; upstream source code remains at its original location.
 
-## Navigation
-Each folder contains Markdown summaries of identified repositories, including their descriptions, matched keywords, and direct links to the source code for auditing purposes.
+Each card should include a repository title, short description, canonical GitHub URL, matched discovery keywords, and upstream topics.
+
+## Validate the local catalog
+
+Requirements: Python 3.11 or newer. No third-party packages or network access are required.
+
+```bash
+python scripts/catalog_audit.py --root .
+python -m unittest discover -s tests -p 'test_*.py' -v
+```
+
+The validator checks local Markdown structure, GitHub URL syntax, title/URL consistency, missing metadata, duplicate references, and taxonomy aliases. It does not contact GitHub or confirm upstream status.
+
+See [Catalog Schema and Validation](docs/CATALOG_SCHEMA.md) for the record format, taxonomy normalization, and limitations.
+
+## Research methodology and limits
+
+The catalog's historical discovery process used repository metadata and keyword matching. The original PyGithub discovery scripts are not present in this repository, so automated upstream discovery and categorization are not currently reproducible from this checkout.
+
+Keyword matches are discovery hints, not proof that a repository belongs in a category. For example, a generic match such as `ML` can produce false positives. Categories should be reviewed by a human and normalized over time.
+
+The catalog may contain archived, deprecated, inactive, or unlicensed upstream projects. Before using a listed project:
+
+1. Open the upstream repository and verify its owner and current status.
+2. Check archived/deprecated notices and recent maintenance activity.
+3. Read the upstream license and security policy.
+4. Review source code and dependencies independently.
+5. Confirm that the project is appropriate for the intended environment.
+
+The historical [local metadata scan report](Audit_Reports/Security_Audit_Summary.md) describes only the catalog files scanned at that time. It does not report the security posture of linked repositories.
+
+## Security and reporting
+
+See [SECURITY.md](SECURITY.md) for vulnerability reporting. Do not submit credentials, personal data, or sensitive exploit details in public issues.
+
+## License and terms
+
+The repository includes a license file and separate terms. Review both before redistribution or commercial use. The terms contain proprietary-language statements that should be reconciled with the repository license by the maintainer; this README does not claim that the legal position is settled.
