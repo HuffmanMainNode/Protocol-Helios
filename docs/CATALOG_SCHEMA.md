@@ -31,3 +31,12 @@ Normalization is reported, not destructively applied to directory names. Existin
 ## Limits
 
 A syntactically valid link does not prove that an upstream repository exists, is maintained, is safe, is government-operated, or is licensed for reuse. Upstream status, archived/deprecated status, commit freshness, license, security posture, and source authenticity require separate checks. The historical security scan only covered local Markdown/metadata at the time it ran; it did not scan linked upstream repositories.
+
+
+## Baseline validation: 2026-11-03
+
+The local validator processed **625 catalog cards** with zero structural errors and zero metadata warnings. It found **285 cross-index repository references**, which are expected because the same project may appear in the agency and interest-area indexes. It found no duplicate references confined to a single index.
+
+The normalized interest-area counts include 164 machine-learning cards across the `ml`, `ML`, and `machine_learning` directory aliases, 25 neural-network cards, 9 large-language-model cards, and 2 digital-forensics/incident-response cards across `dfir` and `DFIR`.
+
+These counts describe local catalog organization only. They do not measure upstream repository quality or freshness.
