@@ -23,7 +23,7 @@ python -m unittest discover -s tests -p 'test_*.py' -v
 
 The validator checks local Markdown structure, GitHub URL syntax, title/URL consistency, missing metadata, duplicate references, and taxonomy aliases. Its November 3, 2026 baseline validated 625 cards with zero structural errors or metadata warnings. It found 285 expected cross-index references and no same-index duplicates. It does not contact GitHub or confirm upstream status.
 
-See [Catalog Schema and Validation](docs/CATALOG_SCHEMA.md) for the record format, taxonomy normalization, and limitations.
+See [Catalog Schema and Validation](docs/CATALOG_SCHEMA.md) for the record format, taxonomy normalization, and limitations. Agents and other tools can generate an offline JSON index with `python scripts/catalog_export.py --output reports/catalog-index.json`; see the [Agent Integration Guide](docs/AGENT_INTEGRATION.md) and [JSON Schema](schemas/catalog-index.schema.json).
 
 To refresh read-only upstream GitHub metadata such as archived status, last push date, and license identifier, use [Upstream Status Refresh](docs/UPSTREAM_STATUS.md). This optional tool uses the GitHub REST API, requires no third-party packages, and is bounded to 50 repositories by default without a token.
 
