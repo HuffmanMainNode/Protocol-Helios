@@ -6,7 +6,7 @@ Run a bounded GitHub metadata refresh from the catalog root:
 python scripts/upstream_status.py --limit 25 --output reports/upstream-status.json
 ```
 
-Set `GITHUB_TOKEN` in the environment to use authenticated GitHub API rate limits. Without a token, the default maximum is 50 repositories per run. The tool uses only Python's standard library and makes read-only GitHub REST API requests.
+Set `GITHUB_TOKEN` in the environment to use authenticated GitHub API rate limits. A fine-grained token with read-only metadata access is sufficient; no write permission is needed. Never commit the token. Without a token, the default maximum is 50 repositories per run. The tool uses only Python's standard library and makes read-only GitHub REST API requests.
 
 ## Report fields
 
