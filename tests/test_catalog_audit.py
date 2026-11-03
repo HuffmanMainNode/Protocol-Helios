@@ -38,6 +38,22 @@ class CatalogAuditTests(unittest.TestCase):
         self.assertEqual(report["same_index_duplicates"], [])
         self.assertEqual(report["normalized_interest_taxonomy"]["machine-learning"], 1)
 
+    def test_detects_same_index_duplicates_even_when_cross_indexed(self):
+        agency = self.root / "By_Agency" / "Example"
+        interest = self.root / "By_Interest_Area" / "ML"
+        agency.mkdir(parents=True)
+        interest.mkdir(parents=True)
+        (agency / "project-one.md").write_text(CARD, encoding="utf-8")
+        (agency / "project-two.md").write_text(CARD, encoding="utf-8")
+        (interest / "project.md").write_text(CARD, encoding="utf-8")
+
+        report = audit_catalog(self.root)
+
+        self.assertEqual(len(report["cross_index_references"]), 1)
+        self.assertEqual(len(report["same_index_duplicates"]), 1)
+        self.assertEqual(report["same_index_duplicates"][0]["index"], "By_Agency")
+        self.assertEqual(len(report["same_index_duplicates"][0]["paths"]), 2)
+
     def test_rejects_noncanonical_or_malformed_urls(self):
         folder = self.root / "By_Agency" / "Example"
         folder.mkdir(parents=True)
