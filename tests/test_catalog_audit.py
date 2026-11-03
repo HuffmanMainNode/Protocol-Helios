@@ -49,7 +49,7 @@ class CatalogAuditTests(unittest.TestCase):
 
         report = audit_catalog(self.root)
 
-        self.assertEqual(len(report["cross_index_references"]), 1)
+        self.assertEqual(len(report["expected_cross_index_references"]), 1)
         self.assertEqual(len(report["same_index_duplicates"]), 1)
         self.assertEqual(report["same_index_duplicates"][0]["index"], "By_Agency")
         self.assertEqual(len(report["same_index_duplicates"][0]["paths"]), 2)
