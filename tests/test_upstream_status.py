@@ -30,11 +30,18 @@ class UpstreamStatusTests(unittest.TestCase):
             "license": {"spdx_id": "MIT"},
             "visibility": "public",
         }
+        captured = {}
+        def opener(request, timeout):
+            captured["request"] = request
+            return FakeResponse(payload)
+
         result = fetch_repository_status(
             "example/project",
-            opener=lambda request, timeout: FakeResponse(payload),
+            token="read-only-token",
+            opener=opener,
         )
         self.assertEqual(result["status"], "checked")
+        self.assertEqual(captured["request"].get_header("Authorization"), "Bearer read-only-token")
         self.assertTrue(result["archived"])
         self.assertEqual(result["license_spdx_id"], "MIT")
 
@@ -82,6 +89,7 @@ class UpstreamStatusTests(unittest.TestCase):
         self.assertEqual(report["attempted_count"], 1)
         self.assertFalse(report["authenticated"])
         self.assertEqual(len(calls), 1)
+        self.assertEqual(report["not_attempted_count"], report["catalog_repository_count"] - 1)
 
 
 if __name__ == "__main__":
