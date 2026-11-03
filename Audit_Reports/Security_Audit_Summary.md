@@ -1,19 +1,25 @@
-# Zero Trust Security Audit Report
+# Historical Local Catalog Scan Report
 
-## Summary
-**Status:** CLEAN
+**Original scan timestamp:** 2026-04-24 04:04:32 UTC  
+**Status:** Historical result, not a current security certification.
 
-As of this audit, the automated security scanning tools have returned zero immediate critical findings for the repository files.
+## Scope
 
-- **Total Vulnerabilities (Semgrep):** 0
-- **Total Secrets/Leaks (Gitleaks):** 0
-- **Audit Timestamp:** 2026-04-24 04:04:32
+The historical report recorded zero findings from Semgrep's `p/default` ruleset and Gitleaks when scanning the local catalog's Markdown and metadata files at that time.
 
-## Methodology
-The audit was conducted using the following industry-standard automated security analysis tools:
+The scan did **not** inspect the source code, dependencies, build workflows, commit history, secrets, or security posture of the upstream repositories linked by catalog cards. It did not establish that the listed projects are safe, maintained, official, or licensed for reuse.
 
-1. **Semgrep**: A fast, open-source, static analysis tool for finding bugs and enforcing code standards. Scanned using the 'p/default' ruleset.
-2. **Gitleaks**: A SAST tool for detecting and preventing hardcoded secrets like passwords, api keys, and tokens in git repos.
+## Current reproducibility
 
-## Conclusion
-No high-risk security violations or leaked credentials were detected in the processed digital library metadata and markdown files. Continuous monitoring is recommended as new repositories are indexed.
+The original automated discovery scripts described in older README text are not present in this repository. A local catalog validator is now available:
+
+```bash
+python scripts/catalog_audit.py --root .
+python -m unittest discover -s tests -p 'test_*.py' -v
+```
+
+This validator checks local Markdown card structure and URL syntax only. It performs no network requests and does not replace Semgrep, Gitleaks, dependency scanning, upstream source review, or legal review.
+
+## Interpretation
+
+The historical zero-finding result is limited to the local files and rules used on the original scan date. It must not be described as a clean security audit of every linked project. A fresh scan should record tool versions, exact scope, rulesets, commit SHA, and results.
