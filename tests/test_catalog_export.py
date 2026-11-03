@@ -1,3 +1,6 @@
+import json
+import subprocess
+import sys
 import tempfile
 import unittest
 from pathlib import Path
@@ -47,6 +50,28 @@ class CatalogExportTests(unittest.TestCase):
         ))
         self.assertTrue(all(entry["upstream_status"] == "not_checked_by_export" for entry in report["entries"]))
         self.assertEqual(len({entry["source_card"] for entry in report["entries"]}), 2)
+
+    def test_direct_script_invocation_writes_valid_json(self):
+        agency = self.root / "By_Agency" / "Example"
+        interest = self.root / "By_Interest_Area" / "ML"
+        agency.mkdir(parents=True)
+        interest.mkdir(parents=True)
+        (agency / "project.md").write_text(CARD, encoding="utf-8")
+        (interest / "project.md").write_text(CARD, encoding="utf-8")
+        output = self.root / "catalog-index.json"
+        script = Path(__file__).resolve().parents[1] / "scripts" / "catalog_export.py"
+
+        completed = subprocess.run(
+            [sys.executable, str(script), "--root", str(self.root), "--output", str(output)],
+            capture_output=True,
+            text=True,
+            check=False,
+        )
+
+        self.assertEqual(completed.returncode, 0, completed.stderr)
+        report = json.loads(output.read_text(encoding="utf-8"))
+        self.assertEqual(report["catalog_card_count"], 2)
+        self.assertEqual(report["unique_repository_count"], 1)
 
     def test_refuses_to_export_invalid_catalog(self):
         folder = self.root / "By_Agency" / "Example"
