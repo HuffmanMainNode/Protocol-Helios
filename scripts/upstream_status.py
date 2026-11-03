@@ -30,7 +30,11 @@ def fetch_repository_status(repository: str, token: str | None = None, opener=ur
             payload = json.loads(response.read().decode("utf-8"))
             if not isinstance(payload, dict):
                 return {"repository": repository, "status": "invalid_response"}
-            license_data = payload.get("license") or {}
+            license_data = payload.get("license")
+            if license_data is None:
+                license_data = {}
+            if not isinstance(license_data, dict):
+                return {"repository": repository, "status": "invalid_response"}
             return {
                 "repository": repository,
                 "status": "checked",

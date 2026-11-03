@@ -124,10 +124,16 @@ def audit_catalog(root: str | Path) -> dict:
             })
 
     paths_by_repo: dict[str, list[str]] = defaultdict(list)
+    paths_by_repo_index: dict[str, dict[str, list[str]]] = defaultdict(
+        lambda: defaultdict(list)
+    )
     indexes_by_repo: dict[str, set[str]] = defaultdict(set)
     for record in records:
-        paths_by_repo[record["repository"]].append(record["path"])
-        indexes_by_repo[record["repository"]].add(record["index"])
+        repository = record["repository"]
+        index_type = record["index"]
+        paths_by_repo[repository].append(record["path"])
+        paths_by_repo_index[repository][index_type].append(record["path"])
+        indexes_by_repo[repository].add(index_type)
 
     duplicate_references = [
         {"repository": repository, "paths": sorted(paths)}
@@ -138,9 +144,18 @@ def audit_catalog(root: str | Path) -> dict:
         item for item in duplicate_references
         if len(indexes_by_repo[item["repository"]]) > 1
     ]
+    # A repository may be correctly cross-indexed and still be duplicated
+    # within one index. Evaluate each index independently rather than
+    # treating the presence of two indexes as proof that all repeats are valid.
     same_index_duplicates = [
-        item for item in duplicate_references
-        if len(indexes_by_repo[item["repository"]]) == 1
+        {
+            "repository": repository,
+            "index": index_type,
+            "paths": sorted(paths),
+        }
+        for repository, index_groups in sorted(paths_by_repo_index.items())
+        for index_type, paths in sorted(index_groups.items())
+        if len(paths) > 1
     ]
 
     return {
