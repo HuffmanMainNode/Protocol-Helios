@@ -28,6 +28,16 @@ Current aliases include `ml`, `ML`, and `machine_learning` mapping to `machine-l
 
 Normalization is reported, not destructively applied to directory names. Existing paths remain stable until a separate migration is reviewed.
 
+## Machine-readable export
+
+Generate an offline JSON index from the Markdown cards:
+
+```bash
+python scripts/catalog_export.py --output reports/catalog-index.json
+```
+
+The export preserves one entry per source card, including its index, category, keywords, topics, and source path. The same repository may therefore appear more than once. See [Agent Integration](AGENT_INTEGRATION.md) and the [JSON Schema](../schemas/catalog-index.schema.json). The export labels classifications as discovery hints requiring human review and upstream status as not checked.
+
 ## Limits
 
 A syntactically valid link does not prove that an upstream repository exists, is maintained, is safe, is government-operated, or is licensed for reuse. Upstream status, archived/deprecated status, commit freshness, license, security posture, and source authenticity require separate checks. The historical security scan only covered local Markdown/metadata at the time it ran; it did not scan linked upstream repositories.
