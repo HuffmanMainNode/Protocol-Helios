@@ -9,7 +9,12 @@ import sys
 from datetime import datetime, timezone
 from pathlib import Path
 
-from scripts.catalog_audit import audit_catalog, normalize_taxonomy, URL_PATTERN
+from scripts.catalog_audit import (
+    audit_catalog,
+    canonical_github_repo,
+    normalize_taxonomy,
+    URL_PATTERN,
+)
 
 FIELD_PATTERNS = {
     "description": re.compile(r"^\*\*Description:\*\*\s*(.*)$", re.MULTILINE),
@@ -38,8 +43,7 @@ def export_catalog(root: str | Path) -> dict:
             matches = URL_PATTERN.findall(content)
             if len(matches) != 1:
                 continue
-            display_url, linked_url = matches[0]
-            from scripts.catalog_audit import canonical_github_repo
+            _display_url, linked_url = matches[0]
             repository = canonical_github_repo(linked_url)
             if repository is None:
                 continue
