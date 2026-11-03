@@ -1,0 +1,28 @@
+name: Catalog validation
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.11", "3.12", "3.13"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Run catalog validator tests
+        run: python -m unittest discover -s tests -p 'test_*.py' -v
+      - name: Validate catalog structure
+        run: python scripts/catalog_audit.py --root .
