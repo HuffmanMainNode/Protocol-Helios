@@ -26,3 +26,6 @@ jobs:
         run: python -m unittest discover -s tests -p 'test_*.py' -v
       - name: Validate catalog structure
         run: python scripts/catalog_audit.py --root .
+      - name: Generate agent-readable catalog index
+        run: python scripts/catalog_export.py --output "$RUNNER_TEMP/catalog-index.json"
+
