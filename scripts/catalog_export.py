@@ -9,12 +9,23 @@ import sys
 from datetime import datetime, timezone
 from pathlib import Path
 
-from scripts.catalog_audit import (
-    audit_catalog,
-    canonical_github_repo,
-    normalize_taxonomy,
-    URL_PATTERN,
-)
+try:
+    from scripts.catalog_audit import (
+        audit_catalog,
+        canonical_github_repo,
+        normalize_taxonomy,
+        URL_PATTERN,
+    )
+except ModuleNotFoundError as error:
+    # Support both package import in tests and direct execution as a script.
+    if error.name != "scripts":
+        raise
+    from catalog_audit import (
+        audit_catalog,
+        canonical_github_repo,
+        normalize_taxonomy,
+        URL_PATTERN,
+    )
 
 FIELD_PATTERNS = {
     "description": re.compile(r"^\*\*Description:\*\*\s*(.*)$", re.MULTILINE),
