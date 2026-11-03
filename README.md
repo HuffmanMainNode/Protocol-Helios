@@ -25,6 +25,8 @@ The validator checks local Markdown structure, GitHub URL syntax, title/URL cons
 
 See [Catalog Schema and Validation](docs/CATALOG_SCHEMA.md) for the record format, taxonomy normalization, and limitations.
 
+To refresh read-only upstream GitHub metadata such as archived status, last push date, and license identifier, use [Upstream Status Refresh](docs/UPSTREAM_STATUS.md). This optional tool uses the GitHub REST API, requires no third-party packages, and is bounded to 50 repositories by default without a token.
+
 ## Research methodology and limits
 
 The catalog's historical discovery process used repository metadata and keyword matching. The original PyGithub discovery scripts are not present in this repository, so automated upstream discovery and categorization are not currently reproducible from this checkout.

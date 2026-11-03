@@ -145,6 +145,7 @@ def audit_catalog(root: str | Path) -> dict:
 
     return {
         "catalog_cards_validated": len(records),
+        "repositories": sorted(paths_by_repo),
         "errors": errors,
         "warnings": warnings,
         "duplicate_repository_references": duplicate_references,
