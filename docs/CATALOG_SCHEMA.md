@@ -45,7 +45,7 @@ A syntactically valid link does not prove that an upstream repository exists, is
 
 ## Baseline validation: 2026-11-03
 
-The local validator processed **625 catalog cards** with zero structural errors and zero metadata warnings. It found **285 cross-index repository references**, which are expected because the same project may appear in the agency and interest-area indexes. It found no duplicate references confined to a single index.
+The local validator processed **625 catalog cards** with zero structural errors and zero metadata warnings. It found **285 cross-index repository references**, which are expected because the same project may appear in the agency and interest-area indexes. The corrected per-index duplicate check identified **49 same-index duplicate groups**. Many are repeated cards across taxonomy aliases (such as `ML` and `ml`) or multiple interest-area categories. They remain in place pending human review; the validator reports them rather than deleting or reclassifying them.
 
 The normalized interest-area counts include 164 machine-learning cards across the `ml`, `ML`, and `machine_learning` directory aliases, 25 neural-network cards, 9 large-language-model cards, and 2 digital-forensics/incident-response cards across `dfir` and `DFIR`.
 
