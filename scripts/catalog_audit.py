@@ -40,7 +40,13 @@ def canonical_github_repo(url: str) -> str | None:
     parsed = urlparse(url)
     if parsed.scheme != "https" or parsed.hostname != "github.com":
         return None
-    if parsed.username or parsed.password or parsed.port not in (None, 443):
+    if parsed.query or parsed.fragment:
+        return None
+    try:
+        port = parsed.port
+    except ValueError:
+        return None
+    if parsed.username or parsed.password or port not in (None, 443):
         return None
     segments = [segment for segment in parsed.path.strip("/").split("/") if segment]
     if len(segments) != 2:
