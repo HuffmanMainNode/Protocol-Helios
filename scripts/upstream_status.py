@@ -45,7 +45,7 @@ def fetch_repository_status(repository: str, token: str | None = None, opener=ur
     except HTTPError as error:
         if error.code == 404:
             status = "not_found_or_private"
-        elif error.code == 403 and error.headers.get("X-RateLimit-Remaining") == "0":
+        elif error.code == 403 and (error.headers or {}).get("X-RateLimit-Remaining") == "0":
             status = "rate_limited"
         elif error.code == 403:
             status = "forbidden"
@@ -67,6 +67,8 @@ def audit_upstreams(
     sleeper=time.sleep,
 ) -> dict:
     catalog = audit_catalog(root)
+    if catalog["errors"]:
+        raise ValueError("Catalog validation errors must be fixed before checking upstream status.")
     repositories = catalog["repositories"]
     if limit is None:
         limit = len(repositories) if token else min(50, len(repositories))
