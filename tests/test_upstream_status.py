@@ -63,6 +63,22 @@ class UpstreamStatusTests(unittest.TestCase):
             "rate_limited",
         )
 
+    def test_rejects_malformed_json_shapes_without_crashing(self):
+        self.assertEqual(
+            fetch_repository_status(
+                "example/project",
+                opener=lambda request, timeout: FakeResponse([]),
+            )["status"],
+            "invalid_response",
+        )
+        self.assertEqual(
+            fetch_repository_status(
+                "example/project",
+                opener=lambda request, timeout: FakeResponse({"license": "not-an-object"}),
+            )["status"],
+            "invalid_response",
+        )
+
     def test_defaults_to_small_unauthenticated_batch(self):
         calls = []
 
